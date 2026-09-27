@@ -1,0 +1,5 @@
+candidate_index.sqlite3
+candidate_index.sqlite3-shm
+candidate_index.sqlite3-wal
+__pycache__/
+*.pyc
