@@ -122,6 +122,22 @@ def main() -> None:
                     INNER JOIN address_exact AS a
                       ON a.country = s.country AND a.value = s.address
                     WHERE s.name = '' AND s.address <> ''
+                    UNION
+                    SELECT s.source1_entity_id, n.entity_id
+                    FROM s1_input AS s
+                    INNER JOIN name_exact AS n
+                      ON n.country = s.country AND n.value = s.name
+                    WHERE s.name <> ''
+                      AND (SELECT COUNT(*) FROM name_exact AS nx
+                           WHERE nx.country = s.country AND nx.value = s.name) = 1
+                    UNION
+                    SELECT s.source1_entity_id, a.entity_id
+                    FROM s1_input AS s
+                    INNER JOIN address_exact AS a
+                      ON a.country = s.country AND a.value = s.address
+                    WHERE s.address <> ''
+                      AND (SELECT COUNT(*) FROM address_exact AS ax
+                           WHERE ax.country = s.country AND ax.value = s.address) = 1
                 )
                 GROUP BY source1_entity_id;
                 """
